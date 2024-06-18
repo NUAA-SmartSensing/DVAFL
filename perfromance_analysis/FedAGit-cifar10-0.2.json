@@ -1,22 +1,22 @@
 {
     "wandb": {
       "enabled": false,
-      "project": "FedVDA论文",
-      "name": "fedvda-0.5"
+      "project": "FedAGit论文",
+      "name": "FedAGit-0.2"
     },
     "global": {
       "mode": "thread",
       "dataset_pre_load": true,
       "use_file_system": false,
       "multi_gpu": true,
-      "experiment": "FedVDA/essay/50",
+      "experiment": "FedAGit/essay/50",
       "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,10,10,10,10,10,10,10,30,30,30,30,30],
       "dataset": {
         "path": "dataset.CIFAR10.CIFAR10",
         "params": {}
       },
       "iid": {
-        "beta": 0.5
+        "beta": 0.2
       },
       "client_num": 30
     },

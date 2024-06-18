@@ -1,31 +1,31 @@
 {
   "wandb": {
     "enabled": false,
-    "project": "FedVDA论文-UCIHAR",
-    "name": "fedvda"
+    "project": "FedAGit论文-cifar10-0.5-30",
+    "name": "FedAGit-50%"
   },
   "global": {
-    "dataset_pre_load": true,
     "mode": "thread",
     "use_file_system": false,
     "multi_gpu": true,
-    "experiment": "FedVDA/essay/1",
-    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,6,6,6,6,6],
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,30,30,30,30,30,30,30,30,30,30,10,10,10,10,10,10,10,10,10,10,30,30,30,30,30],
     "dataset": {
-      "path": "dataset.UCIHAR.UCIHAR",
+      "path": "dataset.CIFAR10.CIFAR10",
       "params": {}
     },
-    "iid": true,
+    "iid": {
+      "beta": 0.5
+    },
     "client_num": 30
   },
   "server": {
-    "path": "server.NormalServer.NormalServer",
-    "epochs": 500,
+    "path": "server.SyncServer.SyncServer",
+    "epochs": 200,
     "model": {
-      "path": "model.HAR.cnn.CNN",
+      "path": "torchvision.models.resnet.resnet18",
       "params": {
-        "train_shape": "self.train_ds.data.shape",
-        "category": 12
+        "num_classes": 10
       }
     },
     "scheduler": {
@@ -38,9 +38,9 @@
       }
     },
     "updater": {
-      "path": "updater.SyncUpdater.SyncUpdater",
+      "path": "updater.VDAUpdater.VDAUpdater",
       "update": {
-        "path": "update.FedAvg.FedAvg",
+        "path": "update.FedVDA.FedVDA",
         "params": {
         }
       },
@@ -50,12 +50,9 @@
     }
   },
   "queue_manager": {
-    "path": "queuemanager.VCMQueueManager.VCMQueueManager",
-    "vcm": {
-      "update": "direct"
-    },
+    "path": "queuemanager.VDAQueueManager.VDAQueueManager",
     "receiver": {
-      "path": "receiver.VCMReceiver.VCMReceiver",
+      "path": "receiver.VDAReceiver.VDAReceiver",
       "params": {
       }
     },
@@ -69,18 +66,20 @@
     "path": "clientmanager.NormalClientManager.NormalClientManager"
   },
   "client": {
-    "path": "client.NormalClient.NormalClient",
-    "epochs": 1,
-    "batch_size": 64,
+    "path": "client.VDAClient.VDAClient",
+    "epochs": 2,
+    "batch_size": 128,
     "model": {
-      "path": "model.HAR.cnn.CNN",
+      "path": "torchvision.models.resnet.resnet18",
       "params": {
-        "train_shape": "self.train_ds.data.shape",
-        "category": 12
+        "num_classes": 10
       }
     },
-    "classes": 10,
     "loss": "torch.nn.functional.cross_entropy",
+    "transform": {
+      "path": "transforms.Transforms.TransformForCIFARFactory",
+      "params": {}
+    },
     "mu": 0,
     "optimizer": {
       "path": "torch.optim.SGD",

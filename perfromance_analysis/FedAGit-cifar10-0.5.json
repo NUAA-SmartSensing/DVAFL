@@ -1,31 +1,32 @@
 {
     "wandb": {
       "enabled": false,
-      "project": "FedVDA论文-FashionMnist",
-      "name": "fedvda-0.1"
+      "project": "FedAGit论文",
+      "name": "FedAGit-0.5"
     },
     "global": {
       "mode": "thread",
       "dataset_pre_load": true,
       "use_file_system": false,
       "multi_gpu": true,
-      "experiment": "FedVDA/essay/1",
-      "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5,5,5,10,10,10,10,10],
+      "experiment": "FedAGit/essay/50",
+      "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,10,10,10,10,10,10,10,30,30,30,30,30],
       "dataset": {
-        "path": "dataset.FashionMNIST.FashionMNIST",
+        "path": "dataset.CIFAR10.CIFAR10",
         "params": {}
       },
       "iid": {
-        "beta": 0.1
+        "beta": 0.5
       },
       "client_num": 30
     },
     "server": {
       "path": "server.NormalServer.NormalServer",
-      "epochs": 500,
+      "epochs": 200,
       "model": {
-        "path": "model.CNN.CNN",
+        "path": "torchvision.models.resnet.resnet18",
         "params": {
+          "num_classes": 10
         }
       },
       "scheduler": {
@@ -71,14 +72,19 @@
     },
     "client": {
       "path": "client.NormalClient.NormalClient",
-      "epochs": 1,
-      "batch_size": 64,
+      "epochs": 2,
+      "batch_size": 128,
       "model": {
-        "path": "model.CNN.CNN",
+        "path": "torchvision.models.resnet.resnet18",
         "params": {
+          "num_classes": 10
         }
       },
       "loss": "torch.nn.functional.cross_entropy",
+      "transform": {
+        "path": "transforms.Transforms.TransformForCIFARFactory.createTransform",
+        "params": {}
+      },
       "mu": 0,
       "optimizer": {
         "path": "torch.optim.SGD",

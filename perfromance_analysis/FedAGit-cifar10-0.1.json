@@ -1,18 +1,18 @@
 {
   "wandb": {
     "enabled": false,
-    "project": "FedVDA论文-UCIHAR",
-    "name": "fedvda-0.1"
+    "project": "FedAGit论文",
+    "name": "FedAGit-0.1"
   },
   "global": {
-    "dataset_pre_load": true,
     "mode": "thread",
+    "dataset_pre_load": true,
     "use_file_system": false,
     "multi_gpu": true,
-    "experiment": "FedVDA/essay/1",
-    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,6,6,6,6,6],
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,10,10,10,10,10,10,10,30,30,30,30,30],
     "dataset": {
-      "path": "dataset.UCIHAR.UCIHAR",
+      "path": "dataset.CIFAR10.CIFAR10",
       "params": {}
     },
     "iid": {
@@ -22,12 +22,11 @@
   },
   "server": {
     "path": "server.NormalServer.NormalServer",
-    "epochs": 500,
+    "epochs": 200,
     "model": {
-      "path": "model.HAR.cnn.CNN",
+      "path": "torchvision.models.resnet.resnet18",
       "params": {
-        "train_shape": "self.train_ds.data.shape",
-        "category": 12
+        "num_classes": 10
       }
     },
     "scheduler": {
@@ -37,7 +36,8 @@
         "params": {
           "c_ratio": 0.7
         }
-      }
+      },
+      "time_window": 0
     },
     "updater": {
       "path": "updater.SyncUpdater.SyncUpdater",
@@ -72,17 +72,19 @@
   },
   "client": {
     "path": "client.NormalClient.NormalClient",
-    "epochs": 1,
-    "batch_size": 64,
+    "epochs": 2,
+    "batch_size": 128,
     "model": {
-      "path": "model.HAR.cnn.CNN",
+      "path": "torchvision.models.resnet.resnet18",
       "params": {
-        "train_shape": "self.train_ds.data.shape",
-        "category": 12
+        "num_classes": 10
       }
     },
-    "classes": 10,
     "loss": "torch.nn.functional.cross_entropy",
+    "transform": {
+      "path": "transforms.Transforms.TransformForCIFARFactory.createTransform",
+      "params": {}
+    },
     "mu": 0,
     "optimizer": {
       "path": "torch.optim.SGD",

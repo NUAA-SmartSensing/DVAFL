@@ -1,14 +1,14 @@
 {
   "wandb": {
     "enabled": false,
-    "project": "FedVDA论文",
-    "name": "fedvda-adam"
+    "project": "FedAGit论文",
+    "name": "FedAGit+nova"
   },
   "global": {
     "mode": "thread",
     "use_file_system": false,
     "multi_gpu": true,
-    "experiment": "FedVC/essay/50",
+    "experiment": "FedAGit/essay/1",
     "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,10,10,10,10,10,10,10,30,30,30,30,30],
     "dataset": {
       "path": "dataset.CIFAR10.CIFAR10",
@@ -41,15 +41,8 @@
     "updater": {
       "path": "updater.SyncUpdater.SyncUpdater",
       "update": {
-        "path": "update.FedAvg.FedAvg",
+        "path": "update.FedNova.FedNova",
         "params": {
-        }
-      },
-      "optimizer": {
-        "path": "torch.optim.Adam",
-        "params": {
-          "lr": 0.01,
-          "weight_decay": 0
         }
       },
       "loss": "torch.nn.functional.cross_entropy",
@@ -60,7 +53,7 @@
   "queue_manager": {
     "path": "queuemanager.VCMQueueManager.VCMQueueManager",
     "vcm": {
-      "update": "None"
+      "update": "direct"
     },
     "receiver": {
       "path": "receiver.VCMReceiver.VCMReceiver",
@@ -77,7 +70,7 @@
     "path": "clientmanager.NormalClientManager.NormalClientManager"
   },
   "client": {
-    "path": "client.NormalClient.NormalClient",
+    "path": "client.NovaClient.NovaClient",
     "epochs": 2,
     "batch_size": 128,
     "model": {
@@ -95,7 +88,7 @@
     "optimizer": {
       "path": "torch.optim.SGD",
       "params": {
-        "lr": 0.3,
+        "lr": 0.01,
         "weight_decay": 0
       }
     }

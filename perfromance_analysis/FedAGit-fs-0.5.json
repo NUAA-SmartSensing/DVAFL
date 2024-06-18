@@ -1,22 +1,22 @@
 {
     "wandb": {
       "enabled": false,
-      "project": "FedVDA论文-FashionMnist",
-      "name": "fedvda-0.2"
+      "project": "FedAGit论文-FashionMnist",
+      "name": "FedAGit-0.5"
     },
     "global": {
       "mode": "thread",
       "dataset_pre_load": true,
       "use_file_system": false,
       "multi_gpu": true,
-      "experiment": "FedVDA/essay/1",
+      "experiment": "FedAGit/essay/1",
       "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5,5,5,10,10,10,10,10],
       "dataset": {
         "path": "dataset.FashionMNIST.FashionMNIST",
         "params": {}
       },
       "iid": {
-        "beta": 0.2
+        "beta": 0.5
       },
       "client_num": 30
     },

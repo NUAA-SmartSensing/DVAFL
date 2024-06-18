@@ -1,23 +1,21 @@
 {
   "wandb": {
     "enabled": false,
-    "project": "FedVDA论文-UCIHAR",
-    "name": "fedvda-0.5"
+    "project": "FedAGit论文-UCIHAR",
+    "name": "FedAGit"
   },
   "global": {
     "dataset_pre_load": true,
     "mode": "thread",
     "use_file_system": false,
     "multi_gpu": true,
-    "experiment": "FedVDA/essay/1",
+    "experiment": "FedAGit/essay/1",
     "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,6,6,6,6,6],
     "dataset": {
       "path": "dataset.UCIHAR.UCIHAR",
       "params": {}
     },
-    "iid": {
-      "beta": 0.5
-    },
+    "iid": true,
     "client_num": 30
   },
   "server": {
