@@ -1,0 +1,91 @@
+{
+  "wandb": {
+    "enabled": false,
+    "project": "MStep",
+    "name": "1"
+  },
+  "global": {
+    "dataset_pre_load": true,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "MStep/1",
+    "stale": {
+      "step": 2,
+      "shuffle": true,
+      "list": [2, 2, 2, 2, 2]
+    },
+    "dataset": {
+      "path": "dataset.MNIST.MNIST",
+      "params": {}
+    },
+    "iid":  {
+      "beta": 0.5
+    },
+    "client_num": 10
+  },
+  "server": {
+    "path": "server.NormalServer.NormalServer",
+    "epochs": 20,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {}
+    },
+    "scheduler": {
+      "path": "scheduler.AsyncScheduler.AsyncScheduler",
+      "schedule_interval": 10,
+      "schedule_delay": 20,
+      "schedule": {
+        "path": "schedule.NoSchedule.NoSchedule",
+        "params": {
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.ActiveAsyncUpdater.ActiveAsyncUpdater",
+      "num_generator": 3,
+      "loss": "torch.nn.functional.cross_entropy",
+      "update": {
+        "path": "update.StepAsyncAvg.StepAsyncAvg",
+        "params": {
+          "rho": 0.2,
+          "alpha": 0.5
+        }
+      }
+    }
+  },
+  "queue_manager": {
+    "path": "queuemanager.SingleQueueManager.SingleQueueManager",
+    "receiver": {
+      "path": "receiver.NormalReceiver.NormalReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {
+      }
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager"
+  },
+  "client": {
+    "path": "client.ActiveClient.ActiveClient",
+    "epochs": 1,
+    "batch_size": 50,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {}
+    },
+    "acquire_model_delay": 1,
+    "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0.01,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.01,
+        "weight_decay": 0
+      }
+    }
+  }
+}
