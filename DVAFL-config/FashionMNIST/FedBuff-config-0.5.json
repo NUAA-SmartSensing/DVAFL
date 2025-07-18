@@ -1,0 +1,90 @@
+{
+  "wandb": {
+    "enabled": true,
+      "project": "DVAFL-TMC2025-FS",
+      "name": "FedBuff-0.5"
+  },
+  "global": {
+    "seed": 16271824,
+    "save": false,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5,5,5,10,10,10,10,10],
+    "dataset": {
+      "path": "dataset.FashionMNIST.FashionMNIST",
+      "params": {}
+    },
+    "iid": {
+      "beta": 0.5
+    },
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.NormalServer.NormalServer",
+    "epochs": 500,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.AsyncScheduler.AsyncScheduler",
+      "schedule_interval": 1,
+      "schedule_delay": 60,
+      "schedule":{
+        "path": "schedule.RandomSchedule.RandomSchedule",
+        "params": {
+          "c_ratio": 0.7
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.AsyncUpdater.AsyncUpdater",
+      "num_generator": 15,
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {
+        }
+      },
+      "loss": "torch.nn.functional.cross_entropy",
+      "params": {
+      }
+    }
+  },
+  "queue_manager": {
+    "path": "queuemanager.SingleQueueManager.SingleQueueManager",
+    "receiver": {
+      "path": "receiver.NormalReceiver.NormalReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {
+      }
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager",
+    "process_num": 1
+  },
+  "client": {
+    "path": "client.NormalClient.NormalClient",
+    "epochs": 1,
+    "batch_size": 64,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {
+      }
+    },
+      "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.01
+      }
+    }
+  }
+}

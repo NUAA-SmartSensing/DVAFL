@@ -1,0 +1,105 @@
+{
+  "wandb": {
+    "enabled": false,
+    "project": "DVAFL-TMC2025-PennTreebank",
+    "name": "FedAvg"
+  },
+  "global": {
+    "seed": 0,
+    "save": false,
+    "dataset_pre_load": true,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAvg/PennTreebank",
+    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5],
+    "dataset": {
+      "path": "dataset.PennTreebankDataset.PennTreebank",
+      "params": {
+        "data_dir": "../data/ptb",
+        "seq_len": 35,
+        "min_freq": 1,
+        "normalize": false,
+        "use_embedding": true
+      }
+    },
+    "iid": {
+      "beta": 0.5
+    },
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.NormalServer.NormalServer",
+    "epochs": 500,
+    "model": {
+      "path": "model.TinyTCNPennTreebank.TinyTCNPennTreebank",
+      "params": {
+        "embed_dim": 200,
+        "seq_len": 35,
+        "num_channels": [128, 128, 128],
+        "kernel_size": 3,
+        "dropout": 0.3,
+        "use_embedding": true,
+        "vocab_size": 10001
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.SyncScheduler.SyncScheduler",
+      "schedule": {
+        "path": "schedule.RandomSchedule.RandomSchedule",
+        "params": {
+          "c_ratio": 1.0
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.SyncUpdater.SyncUpdater",
+      "loss": "torch.nn.functional.cross_entropy",
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {}
+      }
+    }
+  },
+  "queue_manager": {
+    "path": "queuemanager.SingleQueueManager.SingleQueueManager",
+    "receiver": {
+      "path": "receiver.NormalReceiver.NormalReceiver",
+      "params": {}
+    },
+    "checker": {
+      "path": "checker.SyncChecker.SyncChecker",
+      "params": {}
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager"
+  },
+  "client": {
+    "path": "client.NormalClient.NormalClient",
+    "epochs": 5,
+    "batch_size": 32,
+    "task_num": 10,
+    "task_interval": 10,
+    "train_func": "core.handlers.LanguageModelTrainHandler.LanguageModelTrain",
+    "model": {
+      "path": "model.TinyTCNPennTreebank.TinyTCNPennTreebank",
+      "params": {
+        "embed_dim": 200,
+        "seq_len": 35,
+        "num_channels": [128, 128, 128],
+        "kernel_size": 3,
+        "dropout": 0.3,
+        "use_embedding": true,
+        "vocab_size": 10001
+      }
+    },
+    "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.01
+      }
+    }
+  }
+}

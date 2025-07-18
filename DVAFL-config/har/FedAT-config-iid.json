@@ -1,0 +1,103 @@
+{
+  "wandb": {
+    "enabled": true,
+      "project": "DVAFL-TMC2025-har",
+      "name": "FedAT-iid"
+  },
+  "global": {
+    "seed": 1618302,
+    "save": false,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,6,6,6,6,6],
+    "dataset": {
+      "path": "dataset.UCIHAR.UCIHAR",
+      "params": {}
+    },
+    "iid": false,
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.SemiAsyncServer.SemiAsyncServer",
+    "epochs": 700,
+    "model": {
+      "path": "model.HAR.cnn.CNN",
+      "params": {
+        "train_shape": "src_obj.train_ds.data.shape",
+        "category": 12
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.SemiAsyncScheduler.SemiAsyncScheduler",
+      "schedule":{
+        "path": "schedule.RandomSchedule.RandomSchedule",
+        "params": {
+          "c_ratio": 0.7
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.SemiAsyncUpdater.SemiAsyncUpdater",
+      "loss": "torch.nn.functional.cross_entropy",
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {
+        }
+      },
+      "group": {
+        "path": "update.FedAT.FedAT",
+        "params": {
+        }
+      }
+    }
+  },
+  "group_manager": {
+    "path": "groupmanager.NormalGroupManager.NormalGroupManager",
+    "group_method": {
+      "path": "group.DelayGroup.DelayGroup",
+      "params": {
+        "step": 3
+      }
+    }
+   },
+  "queue_manager": {
+    "path": "queuemanager.QueueListManager.QueueListManager",
+    "receiver": {
+      "path": "receiver.MultiQueueReceiver.MultiQueueReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {
+      }
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager",
+    "process_num": 1
+  },
+  "client": {
+    "path": "client.SemiClient.SemiClient",
+    "epochs": 1,
+    "batch_size": 64,
+    "model": {
+      "path": "model.HAR.cnn.CNN",
+      "params": {
+        "train_shape": "src_obj.train_ds.data.shape",
+        "category": 12
+      }
+    },
+    "classes": 10,
+    "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.01,
+        "weight_decay": 0
+      }
+    }
+  }
+}

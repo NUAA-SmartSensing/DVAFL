@@ -1,0 +1,104 @@
+{
+  "wandb": {
+    "enabled": true,
+      "project": "DVAFL-TMC2025-regression",
+      "name": "DVAFL-0.5-second"
+  },
+  "global": {
+    "mode": {
+      "path": "core.MPMT.MPMT"
+    },
+    "message_queue":{
+      "port": 51098
+    },
+    "seed": 16271824,
+    "save": false,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4],
+    "dataset": {
+      "path": "dataset.CaliforniaHousing.CaliforniaHousing",
+      "params": {}
+    },
+    "iid": {
+      "beta": 0.5
+    },
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.NormalServer.NormalServer",
+    "epochs": 3000,
+    "model": {
+      "path": "model.MLPR.MLPR",
+      "params": {
+        "input_dim": 8,
+        "hidden_dims": [64, 32],
+        "output_dim": 1
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.VDAScheduler.VDAScheduler",
+      "schedule":{
+        "path": "schedule.RandomSchedule.RandomSchedule",
+        "params": {
+          "c_ratio": 0.7
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.SyncUpdater.SyncUpdater",
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {
+        }
+      },
+      "loss": "torch.nn.functional.mse_loss",
+      "test": "core.handlers.RegressionTestHandler.RegressionTest",
+      "params": {
+      }
+    }
+  },
+  "queue_manager": {
+    "path": "queuemanager.VCMQueueManager.VCMQueueManager",
+    "vcm": {
+      "update": "second"
+    },
+    "receiver": {
+      "path": "receiver.VCMReceiver.VCMReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {
+      }
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.MPMTClientManager.MPMTClientManager",
+    "process_num": 1
+  },
+  "client": {
+    "path": "client.NormalClient.NormalClient",
+    "epochs": 2,
+    "batch_size": 32,
+    "model": {
+      "path": "model.MLPR.MLPR",
+      "params": {
+        "input_dim": 8,
+        "hidden_dims": [64, 32],
+        "output_dim": 1
+      }
+    },
+    "loss": "torch.nn.functional.mse_loss",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.001,
+        "weight_decay": 1e-5
+      }
+    }
+  }
+}

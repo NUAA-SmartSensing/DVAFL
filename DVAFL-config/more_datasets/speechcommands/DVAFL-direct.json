@@ -1,0 +1,106 @@
+{
+  "wandb": {
+    "enabled": true,
+    "project": "DVAFL-TMC2025-Speech",
+    "name": "DVAFL-0.5-direct"
+  },
+  "global": {
+    "seed": 0,
+    "save": false,
+    "dataset_pre_load": true,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAvg/SpeechCommands-Optimized",
+    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5],
+    "dataset": {
+      "path": "dataset.SpeechCommands.SpeechCommandsFL",
+      "params": {
+        "n_mfcc": 40,
+        "max_length": 16000,
+        "normalize": true
+      }
+    },
+    "iid": {
+      "beta": 0.5
+    },
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.NormalServer.NormalServer",
+    "epochs": 300,
+    "model": {
+      "path": "model.TinyTCN.TinyTCN",
+      "params": {
+        "input_size": 40,
+        "output_size": 35,
+        "num_channels": [64, 64, 32],
+        "kernel_size": 3,
+        "dropout": 0.3
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.VDAScheduler.VDAScheduler",
+      "task_interval": 10,
+      "task_num": 10,
+      "schedule": {
+        "path": "schedule.RandomSchedule.RandomSchedule",
+        "params": {
+          "c_ratio": 0.7
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.SyncUpdater.SyncUpdater",
+      "loss": "torch.nn.functional.cross_entropy",
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {}
+      }
+    }
+  },
+  "queue_manager": {
+    "path": "queuemanager.VCMQueueManager.VCMQueueManager",
+    "vcm": {
+      "update": "direct",
+      "beta": 0.2
+    },
+    "receiver": {
+      "path": "receiver.VCMReceiver.VCMReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {}
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager"
+  },
+  "client": {
+    "path": "client.NormalClient.NormalClient",
+    "epochs": 5,
+    "batch_size": 64,
+    "task_num": 10,
+    "task_interval": 10,
+    "model": {
+      "path": "model.TinyTCN.TinyTCN",
+      "params": {
+        "input_size": 40,
+        "output_size": 35,
+        "num_channels": [64, 64, 32],
+        "kernel_size": 3,
+        "dropout": 0.3
+      }
+    },
+    "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.Adam",
+      "params": {
+        "lr": 0.005,
+        "weight_decay": 1e-5
+      }
+    }
+  }
+}

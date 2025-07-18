@@ -1,0 +1,98 @@
+{
+  "wandb": {
+    "enabled": true,
+      "project": "DVAFL-TMC2025-FS",
+      "name": "FedAT-0.1"
+  },
+  "global": {
+    "seed": 1618302,
+    "save": false,
+    "use_file_system": false,
+    "multi_gpu": true,
+    "experiment": "FedAGit/essay/50",
+    "stale": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,5,5,5,5,5,10,10,10,10,10],
+    "dataset": {
+      "path": "dataset.FashionMNIST.FashionMNIST",
+      "params": {}
+    },
+    "iid": {
+      "beta": 0.1
+    },
+    "client_num": 30
+  },
+  "server": {
+    "path": "server.SemiAsyncServer.SemiAsyncServer",
+    "epochs": 1500,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {
+      }
+    },
+    "scheduler": {
+      "path": "scheduler.SemiAsyncScheduler.SemiAsyncScheduler",
+      "schedule":{
+        "path": "schedule.FullSchedule.FullSchedule",
+        "params": {
+        }
+      }
+    },
+    "updater": {
+      "path": "updater.SemiAsyncUpdater.SemiAsyncUpdater",
+      "loss": "torch.nn.functional.cross_entropy",
+      "update": {
+        "path": "update.FedAvg.FedAvg",
+        "params": {
+        }
+      },
+      "group": {
+        "path": "update.FedAT.FedAT",
+        "params": {
+        }
+      }
+    }
+  },
+  "group_manager": {
+    "path": "groupmanager.NormalGroupManager.NormalGroupManager",
+    "group_method": {
+      "path": "group.DelayGroup.DelayGroup",
+      "params": {
+        "step": 3
+      }
+    }
+   },
+  "queue_manager": {
+    "path": "queuemanager.QueueListManager.QueueListManager",
+    "receiver": {
+      "path": "receiver.MultiQueueReceiver.MultiQueueReceiver",
+      "params": {
+      }
+    },
+    "checker": {
+      "path": "checker.AllChecker.AllChecker",
+      "params": {
+      }
+    }
+  },
+  "client_manager": {
+    "path": "clientmanager.NormalClientManager.NormalClientManager",
+    "process_num": 1
+  },
+  "client": {
+    "path": "client.SemiClient.SemiClient",
+    "epochs": 1,
+    "batch_size": 64,
+    "model": {
+      "path": "model.CNN.CNN",
+      "params": {
+      }
+    },
+    "loss": "torch.nn.functional.cross_entropy",
+    "mu": 0,
+    "optimizer": {
+      "path": "torch.optim.SGD",
+      "params": {
+        "lr": 0.01
+      }
+    }
+  }
+}
